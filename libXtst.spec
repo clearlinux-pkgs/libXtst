@@ -4,7 +4,7 @@
 #
 Name     : libXtst
 Version  : 1.2.2
-Release  : 6
+Release  : 7
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.2.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.2.tar.bz2
 Summary  : The Xtst Library
