@@ -4,7 +4,7 @@
 #
 Name     : libXtst
 Version  : 1.2.3
-Release  : 10
+Release  : 11
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Summary  : The Xtst Library
@@ -80,8 +80,8 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/include/X11/extensions/XTest.h
 /usr/include/X11/extensions/record.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libXtst.so
+/usr/lib64/pkgconfig/xtst.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -90,4 +90,5 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libXtst.so.6
+/usr/lib64/libXtst.so.6.1.0
