@@ -4,6 +4,5 @@
 #
 xorg-macros
 xi
-recordproto
-xextproto
-inputproto
+32xi
+32xext
