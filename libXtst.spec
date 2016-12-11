@@ -4,7 +4,7 @@
 #
 Name     : libXtst
 Version  : 1.2.3
-Release  : 12
+Release  : 13
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Summary  : The Xtst Library
@@ -18,12 +18,17 @@ BuildRequires : gcc-libstdc++32
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : libxslt-bin
+BuildRequires : pkgconfig(32inputproto)
 BuildRequires : pkgconfig(32recordproto)
 BuildRequires : pkgconfig(32x11)
 BuildRequires : pkgconfig(32xext)
+BuildRequires : pkgconfig(32xextproto)
 BuildRequires : pkgconfig(32xi)
+BuildRequires : pkgconfig(inputproto)
 BuildRequires : pkgconfig(recordproto)
 BuildRequires : pkgconfig(x11)
+BuildRequires : pkgconfig(xext)
+BuildRequires : pkgconfig(xextproto)
 BuildRequires : pkgconfig(xi)
 BuildRequires : pkgconfig(xorg-macros)
 BuildRequires : xmlto
