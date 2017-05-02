@@ -6,7 +6,7 @@
 #
 Name     : libXtst
 Version  : 1.2.3
-Release  : 14
+Release  : 15
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source99 : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2.sig
