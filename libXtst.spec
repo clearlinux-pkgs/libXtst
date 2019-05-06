@@ -6,21 +6,22 @@
 #
 Name     : libXtst
 Version  : 1.2.3
-Release  : 17
+Release  : 18
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source99 : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2.sig
-Summary  : The Xtst Library
+Summary  : X11 Testing -- Resource extension library
 Group    : Development/Tools
 License  : HPND MIT
-Requires: libXtst-lib
-Requires: libXtst-doc
+Requires: libXtst-lib = %{version}-%{release}
+Requires: libXtst-license = %{version}-%{release}
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
 BuildRequires : libxslt-bin
+BuildRequires : pkg-config
 BuildRequires : pkgconfig(32inputproto)
 BuildRequires : pkgconfig(32recordproto)
 BuildRequires : pkgconfig(32x11)
@@ -46,8 +47,9 @@ playback of user actions.
 %package dev
 Summary: dev components for the libXtst package.
 Group: Development
-Requires: libXtst-lib
-Provides: libXtst-devel
+Requires: libXtst-lib = %{version}-%{release}
+Provides: libXtst-devel = %{version}-%{release}
+Requires: libXtst = %{version}-%{release}
 
 %description dev
 dev components for the libXtst package.
@@ -56,8 +58,8 @@ dev components for the libXtst package.
 %package dev32
 Summary: dev32 components for the libXtst package.
 Group: Default
-Requires: libXtst-lib32
-Requires: libXtst-dev
+Requires: libXtst-lib32 = %{version}-%{release}
+Requires: libXtst-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the libXtst package.
@@ -74,6 +76,7 @@ doc components for the libXtst package.
 %package lib
 Summary: lib components for the libXtst package.
 Group: Libraries
+Requires: libXtst-license = %{version}-%{release}
 
 %description lib
 lib components for the libXtst package.
@@ -82,9 +85,18 @@ lib components for the libXtst package.
 %package lib32
 Summary: lib32 components for the libXtst package.
 Group: Default
+Requires: libXtst-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the libXtst package.
+
+
+%package license
+Summary: license components for the libXtst package.
+Group: Default
+
+%description license
+license components for the libXtst package.
 
 
 %prep
@@ -94,33 +106,44 @@ cp -a libXtst-1.2.3 build32
 popd
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1491879776
-export CFLAGS="$CFLAGS -Os -ffunction-sections -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -Os -ffunction-sections -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -Os -ffunction-sections -fno-semantic-interposition "
-export CXXFLAGS="$CXXFLAGS -Os -ffunction-sections -fno-semantic-interposition "
+export SOURCE_DATE_EPOCH=1557108661
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
 %configure --disable-static
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-export CFLAGS="$CFLAGS -m32"
-export CXXFLAGS="$CXXFLAGS -m32"
-export LDFLAGS="$LDFLAGS -m32"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
 %configure --disable-static    --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
+cd ../build32;
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1491879776
+export SOURCE_DATE_EPOCH=1557108661
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/libXtst
+cp COPYING %{buildroot}/usr/share/package-licenses/libXtst/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -141,6 +164,17 @@ popd
 /usr/include/X11/extensions/record.h
 /usr/lib64/libXtst.so
 /usr/lib64/pkgconfig/xtst.pc
+/usr/share/man/man3/XTestCompareCurrentCursorWithWindow.3
+/usr/share/man/man3/XTestCompareCursorWithWindow.3
+/usr/share/man/man3/XTestDiscard.3
+/usr/share/man/man3/XTestFakeButtonEvent.3
+/usr/share/man/man3/XTestFakeKeyEvent.3
+/usr/share/man/man3/XTestFakeMotionEvent.3
+/usr/share/man/man3/XTestFakeRelativeMotionEvent.3
+/usr/share/man/man3/XTestGrabControl.3
+/usr/share/man/man3/XTestQueryExtension.3
+/usr/share/man/man3/XTestSetGContextOfGC.3
+/usr/share/man/man3/XTestSetVisualIDOfVisual.3
 
 %files dev32
 %defattr(-,root,root,-)
@@ -149,9 +183,8 @@ popd
 /usr/lib32/pkgconfig/xtst.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 %doc /usr/share/doc/libXtst/*
-%doc /usr/share/man/man3/*
 
 %files lib
 %defattr(-,root,root,-)
@@ -162,3 +195,7 @@ popd
 %defattr(-,root,root,-)
 /usr/lib32/libXtst.so.6
 /usr/lib32/libXtst.so.6.1.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/libXtst/COPYING
