@@ -6,10 +6,10 @@
 #
 Name     : libXtst
 Version  : 1.2.3
-Release  : 19
+Release  : 20
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2
-Source1 : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2.sig
+Source1  : http://xorg.freedesktop.org/releases/individual/lib/libXtst-1.2.3.tar.bz2.sig
 Summary  : The Xtst Library
 Group    : Development/Tools
 License  : HPND MIT
@@ -101,6 +101,7 @@ license components for the libXtst package.
 
 %prep
 %setup -q -n libXtst-1.2.3
+cd %{_builddir}/libXtst-1.2.3
 pushd ..
 cp -a libXtst-1.2.3 build32
 popd
@@ -110,14 +111,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1568868959
+export SOURCE_DATE_EPOCH=1604442678
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export FCFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
-export FFLAGS="$CFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export FCFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
+export FFLAGS="$FFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
 export CXXFLAGS="$CXXFLAGS -O3 -Os -fdata-sections -ffat-lto-objects -ffunction-sections -flto=4 -fno-semantic-interposition "
 %configure --disable-static
 make  %{?_smp_mflags}
@@ -136,15 +137,15 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 cd ../build32;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1568868959
+export SOURCE_DATE_EPOCH=1604442678
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/libXtst
-cp COPYING %{buildroot}/usr/share/package-licenses/libXtst/COPYING
+cp %{_builddir}/libXtst-1.2.3/COPYING %{buildroot}/usr/share/package-licenses/libXtst/ec811ee8aeff17803ce1179fdd028aa91267002b
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -199,4 +200,4 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/libXtst/COPYING
+/usr/share/package-licenses/libXtst/ec811ee8aeff17803ce1179fdd028aa91267002b
